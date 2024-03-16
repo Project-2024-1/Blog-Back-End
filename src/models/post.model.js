@@ -3,26 +3,17 @@ import mongoose from "mongoose";
 const Schema = mongoose.Schema;
 
 const postSchema = new Schema({
-    PostCode: {
-        type: String,
-        required: true,
-        unique : true,
-    },
     PostTitle: {
         type: String, 
         required: true,
-        unique : true,
     },
     PostDescription: {
         type: String, 
         required: true,
-        unique : true,
         default: "No description"
     },
     PostLink: {
         type: String,
-        required: true,
-        unique : true,
     },
     PostImage: {
         type: String,
@@ -36,9 +27,9 @@ const postSchema = new Schema({
     },
     // render theo description
     PostMetaDescription: {
-        type: Array, 
+        type: String, 
         unique : true,
-        default: [1]
+        default: ""
     },
     // render theo title
     PostMetaKeyword: {
@@ -47,9 +38,9 @@ const postSchema = new Schema({
         default: ""
     },
     PostAuthor: {
-        type: String, 
-        unique : true,
-        default: 123
+        type: Schema.Types.ObjectId,
+        ref: 'User', // Tham chiếu đến mô hình User
+     
     },
     PostTag: {
         type: String, 
