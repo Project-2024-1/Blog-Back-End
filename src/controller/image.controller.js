@@ -13,32 +13,46 @@ import fs from 'fs';
 //     public_id: (req, file) => file.originalname,
 // });
 import path from 'path';
+import Image from "../models/image.model.js";
 
 export const uploadImageToBase64 = async (req, res) => {
     try {
         // Lấy tệp ảnh từ req.file
-        const imageFile = req.file;
-        const imageFilePath = imageFile.path;
+        const imageFile = req.file;   
 
-        // Đọc dữ liệu ảnh từ tệp
-        const imageBuffer = fs.readFileSync(imageFilePath);
+        // Đọc dữ liệu hình ảnh từ tệp
+        const imageBuffer = fs.readFileSync(imageFile.path);
 
-        // Tạo Blob từ dữ liệu ảnh
-        const blob = new Blob([imageBuffer], { type: imageFile.mimetype });
+        // Chuyển đổi dữ liệu hình ảnh thành base64
+        const base64Image = imageBuffer.toString('base64');
 
-        // Lưu đường dẫn mới vào cơ sở dữ liệu
-        const imageURL = URL.createObjectURL(blob);
+        // Lưu base64Image vào cơ sở dữ liệu hoặc thực hiện các thao tác khác ở đây
+        // Ví dụ: Lưu vào cơ sở dữ liệu sử dụng Mongoose
+        const imageUrl = new Image({
+            image: base64Image
+        });
+        await imageUrl.save();
 
-        // Xóa tệp ảnh tạm thời
-        fs.unlinkSync(imageFilePath);
+        // Xóa tệp ảnh sau khi đã đọc và lưu dữ liệu
+        fs.unlinkSync(imageFile.path);
 
-        // Trả về URL của Blob
-        res.status(200).json({ imageURL });
+        // Trả về thông báo thành công
+        res.status(200).json({ message: 'Image uploaded successfully' });
     } catch (error) {
         console.error('Error uploading image:', error);
         res.status(500).json({ error: 'Error uploading image' });
     }
 };
+
+
+export const getAllImages = async (req, res) => {
+    try {
+        const images = await Image.find();
+        res.status(200).json({ images });
+    } catch (error) {
+        res.status(500).json({ message: error.message });
+    }
+}
 
 
 // const uploadImageToCloudinary = async(imageFile, folderName) => {

@@ -1,6 +1,7 @@
 import express from "express";
 import mongoose from "mongoose";
 import dotenv from "dotenv";
+import cors from 'cors'
 import userRouter from './routes/user.route.js';
 import authRouter from './routes/auth.route.js';
 import postRouter from './routes/post.route.js';
@@ -17,14 +18,23 @@ mongoose
     console.log(err);
   });
 
+
+
 const app = express();
 const port = 3000;
+
+
 
 app.use(express.json());
 
 app.listen(port, () => {
   console.log("Sever is running on port " + port + "!!!");
 });
+
+app.use(cors({
+  origin: '*', // Replace with your actual client origin
+  optionsSuccessStatus: 200 // Some legacy browsers choke on 204
+}));
 
 app.use("/api/user", userRouter);
 
