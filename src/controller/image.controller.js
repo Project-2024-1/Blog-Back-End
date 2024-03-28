@@ -14,11 +14,12 @@ import fs from 'fs';
 // });
 import path from 'path';
 import Image from "../models/image.model.js";
+// Đảm bảo bạn import model Image từ đúng đường dẫn
 
-export const uploadImageToBase64 = async (req, res) => {
+export const uploadImageToBase64 = async(req, res) => {
     try {
         // Lấy tệp ảnh từ req.file
-        const imageFile = req.file;   
+        const imageFile = req.file;
 
         // Đọc dữ liệu hình ảnh từ tệp
         const imageBuffer = fs.readFileSync(imageFile.path);
@@ -27,17 +28,15 @@ export const uploadImageToBase64 = async (req, res) => {
         const base64Image = imageBuffer.toString('base64');
 
         // Lưu base64Image vào cơ sở dữ liệu hoặc thực hiện các thao tác khác ở đây
-        // Ví dụ: Lưu vào cơ sở dữ liệu sử dụng Mongoose
         const imageUrl = new Image({
             image: base64Image
         });
-        await imageUrl.save();
 
         // Xóa tệp ảnh sau khi đã đọc và lưu dữ liệu
         fs.unlinkSync(imageFile.path);
 
         // Trả về thông báo thành công
-        res.status(200).json({ message: 'Image uploaded successfully' });
+        res.status(200).json({ message: 'Image uploaded successfully', imageUrl: imageUrl });
     } catch (error) {
         console.error('Error uploading image:', error);
         res.status(500).json({ error: 'Error uploading image' });
@@ -45,7 +44,8 @@ export const uploadImageToBase64 = async (req, res) => {
 };
 
 
-export const getAllImages = async (req, res) => {
+
+export const getAllImages = async(req, res) => {
     try {
         const images = await Image.find();
         res.status(200).json({ images });
@@ -101,4 +101,3 @@ export const getAllImages = async (req, res) => {
 //     }
 
 // }
-
