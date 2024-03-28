@@ -1,51 +1,77 @@
-import fs from 'fs';
 
+import Image from "../models/image.model.js";
 
-// const multer = require('multer');
-// const cloudinary = require('../../config/cloudinary.config');
-// const { CloudinaryStorage } = require('multer-storage-cloudinary');
+import cloudinary from '../common/cloudDinary.config.js';
+
+import multer from 'multer';
+import { CloudinaryStorage } from 'multer-storage-cloudinary';
 
 // const storage = new CloudinaryStorage({
 //     cloudinary: cloudinary,
-//     folder: 'ckeditor-uploads',
-//     allowedFormats: ['jpg', 'png', 'jpeg', 'gif'],
+//     // folder: 'ckeditor-uploads',
+//     allowedFormats: ['jpg', 'png', 'jpeg', 'gif', 'svg'],
 //     // transformation: [{ width: 500, height: 500, crop: 'limit' }],
-//     public_id: (req, file) => file.originalname,
+//     public_id: (req, file) => `ckeditor-uploads/${file.originalname}`,
 // });
-import path from 'path';
-import Image from "../models/image.model.js";
-// Đảm bảo bạn import model Image từ đúng đường dẫn
+const storage = multer.memoryStorage();
+const upload = multer({ storage: storage });
 
-export const uploadImageToBase64 = async(req, res) => {
+// export const uploadImageToCloudinary = (req, res) => {
+//     if (req.files.length > 0) {
+//         res.status(200).json({ message: 'Image uploaded successfully.', file: req.file });
+//     } else {
+//         res.status(400).json({ error: 'No files uploaded.' });
+//     }
+// };
+
+export const uploadMiddleware = upload.single('image');
+
+
+export const uploadImageToCloudinary = async (req, res) => {
     try {
-        // Lấy tệp ảnh từ req.file
-        const imageFile = req.file;
+        if (!req.file) {
+            return res.status(400).json({ error: 'No file uploaded.' });
+        }
 
-        // Đọc dữ liệu hình ảnh từ tệp
-        const imageBuffer = fs.readFileSync(imageFile.path);
+        // Chuyển đổi dữ liệu buffer sang base64
+        const base64Data = req.file.buffer.toString('base64');
 
-        // Chuyển đổi dữ liệu hình ảnh thành base64
-        const base64Image = imageBuffer.toString('base64');
-
-        // Lưu base64Image vào cơ sở dữ liệu hoặc thực hiện các thao tác khác ở đây
-        const imageUrl = new Image({
-            image: base64Image
+        // Tải ảnh lên Cloudinary
+        const result = await cloudinary.v2.uploader.upload(`data:${req.file.mimetype};base64,${base64Data}`, {
+            folder: 'posts',
+            public_id: `posts/${req.file.originalname}`,
+            resource_type: 'auto'
         });
 
-        // Xóa tệp ảnh sau khi đã đọc và lưu dữ liệu
-        fs.unlinkSync(imageFile.path);
-
-        // Trả về thông báo thành công
-        res.status(200).json({ message: 'Image uploaded successfully', imageUrl: imageUrl });
+        // Trả về URL của ảnh trên Cloudinary
+        res.status(200).json({ message: 'Image uploaded successfully.', url: result.secure_url });
     } catch (error) {
-        console.error('Error uploading image:', error);
-        res.status(500).json({ error: 'Error uploading image' });
+        console.error('Error uploading image to Cloudinary:', error);
+        res.status(500).json({ error: 'Error uploading image.' });
     }
 };
 
+// export const uploadImageToCloudinary = async(imageFile, folderName) => {
+//     console.log(imageFile);
+
+    
+//     const imageBuffer = imageFile.buffer;
+//     const dataUrl = `data:${imageFile.mimetype};base64,${imageBuffer.toString('base64')}`;
+
+//     // Thực hiện tải ảnh lên Cloudinary
+//     const uploadResult = await cloudinary.uploader.upload(dataUrl, {
+//         resource_type: 'image',
+//         folder: "web",
+//     });
+//     console.log(uploadResult);
+
+//     return uploadResult;
+// };
 
 
-export const getAllImages = async(req, res) => {
+
+
+export const getAllImages = async (req, res) => {
     try {
         const images = await Image.find();
         res.status(200).json({ images });
@@ -101,3 +127,4 @@ export const getAllImages = async(req, res) => {
 //     }
 
 // }
+
