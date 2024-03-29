@@ -1,10 +1,10 @@
 import express from "express";
-import {  uploadMiddleware, getAllImages, uploadImageToCloudinary} from "../controller/image.controller.js";
+import { uploadMiddleware, getAllImageAndFolder, uploadImageToCloudinary } from "../controller/image.controller.js";
 
 const router = express.Router();
 
-router.get("/", getAllImages);
+router.post("/", getAllImageAndFolder);
 
-router.post("/addImage" , uploadMiddleware , uploadImageToCloudinary);
+router.post("/addImage", uploadMiddleware, uploadImageToCloudinary);
 
 export default router;

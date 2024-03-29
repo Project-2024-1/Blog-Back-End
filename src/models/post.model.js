@@ -4,11 +4,11 @@ const Schema = mongoose.Schema;
 
 const postSchema = new Schema({
     PostTitle: {
-        type: String, 
+        type: String,
         required: true,
     },
     PostDescription: {
-        type: String, 
+        type: String,
         required: true,
         default: "No description"
     },
@@ -21,53 +21,45 @@ const postSchema = new Schema({
     },
     // render theo title
     PostMetaTitle: {
-        type: String, 
-        unique : true,
+        type: String,
         default: ""
     },
     // render theo description
     PostMetaDescription: {
-        type: String, 
-        unique : true,
+        type: String,
         default: ""
     },
     // render theo title
     PostMetaKeyword: {
-        type: String, 
-        unique : true,
+        type: String,
         default: ""
     },
     PostAuthor: {
         type: Schema.Types.ObjectId,
         ref: 'User', // Tham chiếu đến mô hình User
-     
+
     },
     PostTag: {
-        type: String, 
-        unique : true,
+        type: String,
         default: ""
     },
     PostContent: {
-        type: String, 
-        unique : true,
+        type: String,
         default: ""
     },
     PostStatus: {
-        type: String, 
-        unique : true,
+        type: String,
         default: 1
     },
     PostSortOrder: {
-        type: String, 
-        unique : true,
+        type: String,
         default: 1
     },
     PostTotalView: {
-        type: String, 
-        unique : true,
+        type: String,
         default: 0
     },
-}, { timestamps : true});
+}, { timestamps: true });
 
 const Post = mongoose.model('Post', postSchema);
 

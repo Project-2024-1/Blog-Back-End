@@ -1,4 +1,3 @@
-
 import Image from "../models/image.model.js";
 
 import cloudinary from '../common/cloudDinary.config.js';
@@ -27,51 +26,34 @@ const upload = multer({ storage: storage });
 export const uploadMiddleware = upload.single('image');
 
 
-export const uploadImageToCloudinary = async (req, res) => {
+export const uploadImageToCloudinary = async(req, res) => {
     try {
         if (!req.file) {
             return res.status(400).json({ error: 'No file uploaded.' });
         }
+
+        const { folderName } = req.body;
 
         // Chuyển đổi dữ liệu buffer sang base64
         const base64Data = req.file.buffer.toString('base64');
 
         // Tải ảnh lên Cloudinary
         const result = await cloudinary.v2.uploader.upload(`data:${req.file.mimetype};base64,${base64Data}`, {
-            folder: 'posts',
-            public_id: `posts/${req.file.originalname}`,
+            folder: folderName,
+            public_id: `${req.file.originalname}`,
             resource_type: 'auto'
         });
 
         // Trả về URL của ảnh trên Cloudinary
-        res.status(200).json({ message: 'Image uploaded successfully.', url: result.secure_url });
+        res.status(200).json({ message: 'Image uploaded successfully.', code: 200, url: result.secure_url });
     } catch (error) {
         console.error('Error uploading image to Cloudinary:', error);
         res.status(500).json({ error: 'Error uploading image.' });
     }
 };
 
-// export const uploadImageToCloudinary = async(imageFile, folderName) => {
-//     console.log(imageFile);
 
-    
-//     const imageBuffer = imageFile.buffer;
-//     const dataUrl = `data:${imageFile.mimetype};base64,${imageBuffer.toString('base64')}`;
-
-//     // Thực hiện tải ảnh lên Cloudinary
-//     const uploadResult = await cloudinary.uploader.upload(dataUrl, {
-//         resource_type: 'image',
-//         folder: "web",
-//     });
-//     console.log(uploadResult);
-
-//     return uploadResult;
-// };
-
-
-
-
-export const getAllImages = async (req, res) => {
+export const getAllImages = async(req, res) => {
     try {
         const images = await Image.find();
         res.status(200).json({ images });
@@ -93,27 +75,30 @@ export const getAllImages = async (req, res) => {
 //     console.log(uploadResult);
 //     return uploadResult;
 // };
-// const getAllImageAndFolder = async(req, res) => {
-//     try {
-//         // Lấy tất cả tài nguyên từ Cloudinary (tối đa 500 kết quả)
-//         const response = await cloudinary.api.resources({
-//             max_results: 500,
-//         });
-//         // console.log(response)
-//         if (response.resources) {
-//             const images = response.resources.filter((resource) => resource.resource_type === 'image');
-//             const folders = response.resources.filter((resource) => resource.resource_type === 'folder');
-//             res.status(200).json({ images, folders });
-//         } else {
-//             res.status(500).json({ error: 'Lỗi khi lấy dữ liệu từ Cloudinary: Response không chứa resources.' });
-//         }
+export const getAllImageAndFolder = async(req, res) => {
+    try {
+        const { folderName } = req.body;
 
-//     } catch (error) {
-//         // Xử lý lỗi và trả về mã trạng thái 500
-//         console.error(error);
-//         res.status(500).json({ error: 'Lỗi khi lấy dữ liệu từ Cloudinary' });
-//     }
-// }
+        // Lấy tất cả tài nguyên từ Cloudinary trong thư mục chỉ định
+        const response = await cloudinary.v2.api.resources({
+            type: 'upload',
+            prefix: folderName + '/', // Tiền tố của tên file để lấy từ thư mục chỉ định
+            max_results: 500,
+        });
+
+        if (response.resources) {
+            const images = response.resources.filter((resource) => resource.resource_type === 'image');
+            res.status(200).json({ images });
+        } else {
+            res.status(500).json({ error: 'Lỗi khi lấy dữ liệu từ Cloudinary: Response không chứa resources.' });
+        }
+
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ error: 'Lỗi khi lấy dữ liệu từ Cloudinary' });
+    }
+};
+
 
 // const deleteImageCloud = async(req, res) => {
 //     try {
@@ -127,4 +112,3 @@ export const getAllImages = async (req, res) => {
 //     }
 
 // }
-
