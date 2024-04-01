@@ -1,0 +1,39 @@
+POST http://localhost:3000/api/role/addRole
+Content-Type: application/json
+
+{
+    "RoleName" : "Sửa quyền thành viên",
+    "RoleDescription": "Quyền được xsửa quyền thành viên"
+}
+
+###
+GET http://localhost:3000/api/role/
+# Content-Type: application/json
+
+# {
+#     "RoleName" : "Sửa quyền thành viên",
+#     "RoleDescription": "Quyền được xsửa quyền thành viên"
+# }
+
+ 
+###
+
+POST http://localhost:3000/api/auth/signup
+Content-Type: application/json
+
+{
+    "UserName" : "Phuc2",
+    "UserEmail": "phucntt130901@gmail222.com",
+    "UserPasword": "1263562",
+    "UserRole": ["660ada4807f04ac3172cda59", "660ada2c07f04ac3172cda57"]
+}
+
+###
+
+POST http://localhost:3000/api/auth/signin
+Content-Type: application/json
+
+{
+    "UserEmail" : "phucntt130901@gmail222.com",
+    "UserPasword": "1263562"
+}

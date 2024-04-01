@@ -6,6 +6,7 @@ import userRouter from './routes/user.route.js';
 import authRouter from './routes/auth.route.js';
 import postRouter from './routes/post.route.js';
 import imageRouter from './routes/image.route.js';
+import roleRouter from './routes/role.route.js';
 
 dotenv.config();
 
@@ -48,6 +49,8 @@ app.use("/api/auth", authRouter);
 app.use("/api/post", cors(), postRouter);
 
 app.use("/api/image", imageRouter);
+
+app.use("/api/role", roleRouter);
 
 //middle were xử lý nhiều công việc trước khi chuyển đến route chính 
 // next : có thể gọi để chuyển quyền sang middleware tiếp theo 

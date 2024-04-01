@@ -5,23 +5,18 @@ const Schema = mongoose.Schema;
 const userSchema = new Schema({
     UserCode: {
         type: String,
-        required: true,
-        unique : true,
     },
     UserName: {
         type: String, 
         required: true,
-        unique : true,
     },
     UserPasword: {
         type: String, 
         required: true,
-        unique : true,
     },
     UserEmail: {
         type: String,
         required: true,
-        unique : true,
     },
     UserAvatar: {
         type: String,
@@ -29,28 +24,20 @@ const userSchema = new Schema({
     },
     UserDescription: {
         type: String, 
-        unique : true,
         default: ""
     },
-    UserRole: {
-        type: Array, 
-        unique : true,
-        default: [1]
-    },
+    UserRole: [{
+        type: Schema.Types.ObjectId, 
+        ref: 'Role'
+    }],
     AccessToken: {
         type: String, 
-        unique : true,
         default: ""
     },
     UserStatus: {
         type: String, 
-        unique : true,
         default: 1
     },
-    // AccessTokenExpired: {
-    //     type: Date + , 
-    //     unique : true,
-    // },
 }, { timestamps : true});
 
 const User = mongoose.model('User', userSchema);

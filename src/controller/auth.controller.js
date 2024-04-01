@@ -4,9 +4,9 @@ import { errorHandle } from "../utils/error.js";
 import jwt from "jsonwebtoken";
 
 export const signup = async (req, res, next) => {
-  const {UserName, UserEmail, UserPasword } = req.body;
+  const {UserName, UserEmail, UserPasword, UserRole } = req.body;
   const hashedPassword = bcryptjs.hashSync(UserPasword, 10);
-  const newUser = new User({UserName, UserEmail, UserPasword: hashedPassword});
+  const newUser = new User({UserName, UserEmail, UserPasword: hashedPassword, UserRole});
   try {
     await newUser.save();
     res.status(201).json("User created successfully");
@@ -15,7 +15,6 @@ export const signup = async (req, res, next) => {
     // res.status(500).json(error.message);
   }
 };
-
 export const signin = async (req, res, next) => {
   // get data from client
   const { UserEmail, UserPasword } = req.body;
@@ -25,21 +24,27 @@ export const signin = async (req, res, next) => {
     if (!validUser) return next(errorHandle(404, "User not found!"));
     const validPassword = bcryptjs.compareSync(UserPasword, validUser.UserPasword);
     if (!validPassword) return next(errorHandle(401, "Wrong credentials!"));
-    const token = jwt.sign({ id: validUser._id }, process.env.JWT_SECRET);
+    const token = jwt.sign({ id: validUser._id, role: validUser.UserRole }, process.env.JWT_SECRET, { expiresIn: "3000s" });
+    const refreshToken = jwt.sign({ id: validUser._id }, process.env.JWT_SECRET_REFRESH_TOKEN, { expiresIn: "15d" });
     // can have add expires in cookie to give user more time
-    const { password : pass, ...rest } = validUser._doc;
-  if (token) {
-    await User.updateOne({  }, { $set: { AccessToken: token } });
+    // const { password : pass, ...rest } = validUser._doc;
+  if (refreshToken) {
+    await User.updateOne({  }, { $set: { AccessToken: refreshToken } });
   }
     res
     //   .cookie("access_token", token, { httpOnly: true })
       .status(200)
-      .json({...rest, AccessToken: token});
+      .json(
+        {
+          AccessToken: token,
+          RefreshToken: refreshToken,
+          UserRole : validUser.UserRole
+        }
+        );
   } catch (error) {
     next(error);
   }
 };
-
 export const google = async (req, res, next) => {
   console.log("Login with google ...");  
     try {
