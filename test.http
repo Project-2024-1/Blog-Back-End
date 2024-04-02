@@ -8,6 +8,7 @@ Content-Type: application/json
 
 ###
 GET http://localhost:3000/api/role/
+authorization: Beaer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY2MGFkY2VkMDM5MDIyNmJkZWExNThhNiIsInJvbGUiOlsiNjYwYWRhNDgwN2YwNGFjMzE3MmNkYTU5IiwiNjYwYWRhMmMwN2YwNGFjMzE3MmNkYTU3Il0sImlhdCI6MTcxMjA3NDgxNiwiZXhwIjoxNzEyMDc3ODE2fQ.WOLfx_KMl3jFHT9b4nEjEEo-UPDq205rgs4m24XEk0o
 # Content-Type: application/json
 
 # {
@@ -22,10 +23,10 @@ POST http://localhost:3000/api/auth/signup
 Content-Type: application/json
 
 {
-    "UserName" : "Phuc2",
-    "UserEmail": "phucntt130901@gmail222.com",
+    "UserName" : "Phuc4",
+    "UserEmail": "phucntt130901@gmail2a22.com",
     "UserPasword": "1263562",
-    "UserRole": ["660ada4807f04ac3172cda59", "660ada2c07f04ac3172cda57"]
+    "UserRole": ["660ada4807f04ac3172cda59", "660ada2c07f04ac3172cda57", "660c29ea3fcd240c8c3b6d3b"]
 }
 
 ###
