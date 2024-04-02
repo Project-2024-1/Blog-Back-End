@@ -1,5 +1,5 @@
 import { getDataBase, getUrlBase } from "../common/getDataBase.js";
-import Role from "../models/Role.model.js";
+import Role from "../models/role.model.js";
 
 export const getRole = async(req, res) => {
     try {
