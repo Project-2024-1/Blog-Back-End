@@ -1,8 +1,11 @@
 import User from "../models/user.model.js";
 import bcryptjs from "bcryptjs";
 import { errorHandle } from "../utils/error.js";
+import  statusCodeList  from "../common/statusCode.js"
 import jwt from "jsonwebtoken";
+// import session from "express-session";
 
+// Đăng kí
 export const signup = async (req, res, next) => {
   const {UserName, UserEmail, UserPasword, UserRole } = req.body;
   const hashedPassword = bcryptjs.hashSync(UserPasword, 10);
@@ -15,6 +18,7 @@ export const signup = async (req, res, next) => {
     // res.status(500).json(error.message);
   }
 };
+// Đăng nhập
 export const signin = async (req, res, next) => {
   // get data from client
   const { UserEmail, UserPasword } = req.body;
@@ -24,18 +28,21 @@ export const signin = async (req, res, next) => {
     if (!validUser) return next(errorHandle(404, "User not found!"));
     const validPassword = bcryptjs.compareSync(UserPasword, validUser.UserPasword);
     if (!validPassword) return next(errorHandle(401, "Wrong credentials!"));
-    const token = jwt.sign({ id: validUser._id, role: validUser.UserRole }, process.env.JWT_SECRET, { expiresIn: "3000s" });
+    const token = jwt.sign({ id: validUser._id, role: validUser.UserRole }, process.env.JWT_SECRET, { expiresIn: "30s" });
+    // req.session.token = token;
+
     const refreshToken = jwt.sign({ id: validUser._id }, process.env.JWT_SECRET_REFRESH_TOKEN, { expiresIn: "15d" });
     // can have add expires in cookie to give user more time
     // const { password : pass, ...rest } = validUser._doc;
-  if (refreshToken) {
-    await User.updateOne({  }, { $set: { AccessToken: refreshToken } });
-  }
+    if (refreshToken) {
+      await User.updateOne({ UserEmail: validUser.UserEmail }, { $set: { AccessToken: refreshToken } });
+    }
     res
-    //   .cookie("access_token", token, { httpOnly: true })
       .status(200)
       .json(
         {
+          Message: "Login Success",
+          StatusCode: statusCodeList.LoginSuccess,
           AccessToken: token,
           RefreshToken: refreshToken,
           UserRole : validUser.UserRole
@@ -79,4 +86,9 @@ export const google = async (req, res, next) => {
     } catch (error) {
       next(error);
     }
+}
+
+export const getToken = async (req, res, next) => {
+  const newToken = res.locals.newToken
+  console.log(newToken)
 }
