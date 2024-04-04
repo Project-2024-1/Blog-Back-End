@@ -11,3 +11,9 @@ export const getRefreshTokenById = async (id) => {
     const user = await User.findById(id);
     return user.AccessToken;
 }
+
+export const getRoleUser = async (id) => {
+    // console.log(typeof(id) + " " + id);
+    const user = await User.findById(id);
+    return user.UserRole;
+}

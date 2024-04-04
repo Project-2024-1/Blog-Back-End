@@ -3,9 +3,9 @@ import Post from "../models/post.model.js";
 
 export const getPost = async(req, res) => {
     try {
-        const idPost = req.body._id;
-        const pageSize = req.body.pageSize;
-        const pageIndex = req.body.pageIndex;
+        const idPost = req.params._id;
+        const pageSize = req.params.pageSize;
+        const pageIndex = req.params.pageIndex;
         let posts = [];
         let total = "";
         if (idPost) {
@@ -41,15 +41,23 @@ export const addPost = async(req, res, next) => {
         PostStatus,
         PostSortOrder,
         id
-    } = req.body;
+    } = req.body.data;
 
+
+    console.log(req.body.data)
 
     let newPostTitle = getDataBase(PostTitle, PostTitle);
+    console.log(newPostTitle);
     let newPostDescription = getDataBase(PostDescription, PostDescription);
+    console.log(newPostDescription);
     let newPostContent = getDataBase(PostContent, PostContent);
+    console.log(newPostContent);
     let newPostStatus = getDataBase(PostStatus, PostStatus);
+    console.log(newPostStatus);
     let newPostSortOrder = getDataBase(PostSortOrder, PostSortOrder);
+    console.log(newPostSortOrder);
     let newPostMetaTitle = getDataBase(PostMetaTitle, PostTitle);
+    console.log(newPostMetaTitle);
     let newPostMetaDescription = getDataBase(PostMetaDescription, PostDescription);
     let newPostMetaKeyword = getDataBase(PostMetaKeyword, PostTitle);
     let newPostLink = getUrlBase(PostTitle);

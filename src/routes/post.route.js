@@ -4,7 +4,7 @@ import { addPost, deletePost, getPost } from "../controller/post.controller.js";
 
 const router = express.Router();
 
-router.post("/",checkAuthorization, getPost);
+router.get("/",checkAuthorization, getPost);
 router.post("/addPost", addPost);
 router.delete("/deletePost", deletePost);
 router.delete("/deleteManyPost", deletePost);

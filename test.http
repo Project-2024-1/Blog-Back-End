@@ -39,3 +39,12 @@ Content-Type: application/json
     "UserEmail" : "phucntt130901@gmail222.com",
     "UserPasword": "1263562"
 }
+
+
+###
+POST http://localhost:3000/api/auth/refreshToken
+Content-Type: application/json
+
+{
+    "rsToken": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY2MGFkY2VkMDM5MDIyNmJkZWExNThhNiIsImlhdCI6MTcxMjI0Mzc4NCwiZXhwIjoxNzEzNTM5Nzg0fQ.G1CCf14nOAm6WFRFVSaAAjEHo4XE6hLC8M9P0yVl-UQ"
+}

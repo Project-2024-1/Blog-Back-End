@@ -3,6 +3,7 @@ import bcryptjs from "bcryptjs";
 import { errorHandle } from "../utils/error.js";
 import  statusCodeList  from "../common/statusCode.js"
 import jwt from "jsonwebtoken";
+import { getRefreshTokenById, getRoleUser } from "../database/getRoleId.js";
 // import session from "express-session";
 
 // Đăng kí
@@ -25,7 +26,12 @@ export const signin = async (req, res, next) => {
   
   try {
     const validUser = await User.findOne({ UserEmail });
-    if (!validUser) return next(errorHandle(404, "User not found!"));
+    if (!validUser) return res.status(404).json(
+      {
+        Message: "Login failed to user not found",
+        StatusCode: statusCodeList.LoginFailed,
+      }
+    );
     const validPassword = bcryptjs.compareSync(UserPasword, validUser.UserPasword);
     if (!validPassword) return next(errorHandle(401, "Wrong credentials!"));
     const token = jwt.sign({ id: validUser._id, role: validUser.UserRole }, process.env.JWT_SECRET, { expiresIn: "30s" });
@@ -91,4 +97,33 @@ export const google = async (req, res, next) => {
 export const getToken = async (req, res, next) => {
   const newToken = res.locals.newToken
   console.log(newToken)
+}
+
+export const refreshToken = async (req, res, next) => {
+  try {
+    const { rsToken } = req.body;
+
+    // Decode the refreshToken to get the user ID
+    const decodedRsToken = jwt.verify(rsToken, process.env.JWT_SECRET_REFRESH_TOKEN);
+    const idUser = decodedRsToken.id;
+
+    // Get the access token and role for the user
+    const accessToken = await getRefreshTokenById(idUser);
+    const roleToken = await getRoleUser(idUser);
+
+    // Check if the received refreshToken matches the stored refreshToken
+    if (rsToken !== accessToken) {
+      console.log("Refresh token không hợp lệ");
+      return res.sendStatus(403); // Send Forbidden status if refresh token is invalid
+    }
+
+    // Generate a new access token with the same user ID and role
+    const newAccessToken = jwt.sign({ id: idUser, role: roleToken }, process.env.JWT_SECRET, { expiresIn: "30s" });
+
+    // Send the new access token to the client
+    res.status(200).json({ token: newAccessToken });
+  } catch (error) {
+    console.error("Error refreshing token:", error);
+    res.sendStatus(500); // Internal Server Error if any error occurs
+  }
 }
