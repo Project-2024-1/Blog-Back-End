@@ -1,6 +1,8 @@
 import jwt from 'jsonwebtoken';
 import roleList from '../common/role.js';
 import { getRoleById, getRefreshTokenById } from '../database/getRoleId.js';
+import statusCodeList from './statusCode.js';
+import { errorHandle } from '../utils/error.js';
 
 // export const checkAuthorization = async function authenticateToken(req, res, next) {
 //     const authHeader = req.headers['authorization'];
@@ -22,71 +24,60 @@ import { getRoleById, getRefreshTokenById } from '../database/getRoleId.js';
 //     });
 // };
 
+
 export const checkAuthorization = async function authenticateToken(req, res, next) {
-    const authHeader = req.headers['authorization'];
-    const token = authHeader && authHeader.split(' ')[1];
-    if (!token) {
-        return res.sendStatus(401); // Unauthorized
-    }
-    jwt.verify(token, process.env.JWT_SECRET, async (err, user) => {
-        if (err) {
-            if (err.name === 'TokenExpiredError') {
-                try {
-                    // Nếu token hết hạn, nhưng vẫn có thể lấy được thông tin người dùng
-                    const decodedToken = jwt.decode(token);
-                    const idUser = decodedToken.id;
-                    const roleUser = decodedToken.role;
-                    if (decodedToken && idUser) {
-                        // Lấy ID từ token và truy xuất vào cơ sở dữ liệu
-                        const user = await getRefreshTokenById(idUser);
-                        if (user && user !== null) {
-                            // User tồn tại, gán user vào req để sử dụng trong các middleware tiếp theo
-                            jwt.verify(user, process.env.JWT_SECRET_REFRESH_TOKEN, async (err, user) => {
-                                if (err) {
-                                    return res.sendStatus(403); // Forbidden
-                                }
+    try {
+        const authHeader = req.headers['authorization'];
+        const token = authHeader && authHeader.split(' ')[1];
+        if (!token) {
+            return res.status(401).json({
+                message: 'Unauthorized',
+                statusCode: 401,
+            });
+        }
 
-                                const newToken = await generateNewToken(user._id, roleUser);
-
-                                // console.log(newToken);
-
-                                res.setHeader('Authorization', `Bearer ${newToken}`);
-
-                                if (!(await checkPermission(req, roleUser)))
-                                 {
-                                    return res.sendStatus(403);
-                                }
-                                    
-                            next();                                  
-                            });
-                            
-                        } else {
-                            // Không tìm thấy người dùng trong cơ sở dữ liệu
-                            return res.sendStatus(403); // Forbidden
-                        }
-                    } else {
-                        // Không thể giải mã token hoặc không có ID trong token
-                        return res.sendStatus(403); // Forbidden
-                    }
-                } catch (error) {
-                    // Lỗi xảy ra khi giải mã token hoặc truy xuất cơ sở dữ liệu
-                    console.error(error);
-                    return res.sendStatus(500); // Internal Server Error
+        jwt.verify(token, process.env.JWT_SECRET, async (err, user) => {
+            if (err) {
+                if (err.name === 'TokenExpiredError') {
+                    return res.status(401).json(
+                        errorHandle(
+                            statusCodeList.TokenExpired,
+                            'Token expired',
+                            'Đã xảy ra lỗi. Liên hệ quản trị viên',
+                             err));
+                } else {
+                    return res.status(403).json(
+                        errorHandle(
+                            statusCodeList.TokenError,
+                            "Token invalid",
+                            'Đã xảy ra lỗi. Liên hệ quản trị viên',
+                            err
+                        )
+                    );
                 }
             } else {
-                // Các lỗi khác (không phải là TokenExpiredError)
-                console.error(err);
-                return res.sendStatus(403); // Forbidden
-            }
-        } else {
-            const userPremission = user.role;
-            console.log(await checkPermission(req, userPremission));
-            if (!(await checkPermission(req, userPremission))) {
-                    return res.sendStatus(403); 
+                const userPermission = user.role;
+                const hasPermission = await checkPermission(req, userPermission);
+                if (!hasPermission) {
+                    return res.status(403).json(
+                        errorHandle(
+                            statusCodeList.NotPermission,
+                            'Permission denied',
+                            'Bạn không có quyền truy cập với module này',
+                            err
+                        )
+                        );
                 }
                 next();
+            }
+        });
+        } catch (error) {
+            console.error(error);
+            return res.status(500).json({
+                message: 'Internal Server Error',
+                statusCode: 500,
+            });
         }
-    });
 };
 
 const checkPermission = async (req, userPermissions) => {
