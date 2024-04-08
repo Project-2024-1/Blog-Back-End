@@ -1,15 +1,18 @@
 import { getDataBase, getUrlBase } from "../common/getDataBase.js";
 import Role from "../models/role.model.js";
+import { errorHandle } from "../utils/error.js";
+// import { getBaseData } from "./baseController.js";
 
 export const getRole = async(req, res) => {
     try {
-        const idRole = req.body._id;
+        const { id } = req.query;
+        // console.log(id)
         // const pageSize = req.body.pageSize;
         // const pageIndex = req.body.pageIndex;
         let roles = [];
         let total = "";
-        if (idRole) {
-            roles = await Role.findOne({ _id: idRole });
+        if (id) {
+            roles = await Role.findOne({ _id: id });
             total = "1";
         } else {
             roles = await Role.find();
@@ -17,9 +20,29 @@ export const getRole = async(req, res) => {
         }
         res.json({ roles, total });
     } catch (error) {
-        res.status(500).json({ message: error.message });
+        
+        res.status(500).json(errorHandle(500, error.message, "Có lỗi xảy ra, vui loại liên hệ quản trị viên", error));
     }
 }
+
+
+// export const getRole = async (req, res) => {
+//     try {
+//       const { id } = req.query;
+//       let roles = [];
+//       let total = "";
+//       if (id) {
+//         roles = await getBaseData(Role, id);
+//         total = "1";
+//       } else {
+//         roles = await getBaseData(Role);
+//         total = await Role.count();
+//       }
+//       res.json({ roles, total });
+//     } catch (error) {
+//       res.status(500).json({ message: error.message });
+//     }
+//   };
 
 export const addRole = async(req, res, next) => {
 

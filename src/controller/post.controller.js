@@ -1,11 +1,11 @@
 import { getDataBase, getUrlBase } from "../common/getDataBase.js";
 import Post from "../models/post.model.js";
+import { errorHandle } from "../utils/error.js";
+import { getBaseData } from "./baseController.js";
 
 export const getPost = async(req, res) => {
     try {
-        const idPost = req.params._id;
-        const pageSize = req.params.pageSize;
-        const pageIndex = req.params.pageIndex;
+        const {idPost , pageSize, pageIndex} = req.query;
         let posts = [];
         let total = "";
         if (idPost) {
@@ -20,9 +20,27 @@ export const getPost = async(req, res) => {
         }
         res.json({ posts, total });
     } catch (error) {
-        res.status(500).json({ message: error.message });
+        res.status(500).json(errorHandle(500, error.message, "Có lỗi xảy ra, vui loại liên hệ quản trị viên", error));
     }
 }
+
+// export const getPost = async (req, res) => {
+//     try {
+//       const { id } = req.query;
+//       let posts = [];
+//       let total = "";
+//       if (id) {
+//         posts = await getBaseData(Post, id);
+//         total = "1";
+//       } else {
+//         posts = await getBaseData(Post);
+//         total = await Post.count();
+//       }
+//       res.json({ posts, total });
+//     } catch (error) {
+//       res.status(500).json({ message: error.message });
+//     }
+// }
 
 export const addPost = async(req, res, next) => {
 

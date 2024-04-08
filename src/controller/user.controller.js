@@ -2,9 +2,8 @@ import User from "../models/user.model.js";
 
 export const getUser = async (req, res) => {
         try {
-            const idUser = req.body.UserCode;
-            const pageSize = req.body.pageSize;
-            const pageIndex = req.body.pageIndex;
+            const {idUser , pageSize, pageIndex} = req.query;
+            console.log(idUser)
             let users = [];
             let total = "";
             if(idUser){
@@ -19,6 +18,7 @@ export const getUser = async (req, res) => {
                 users = await User.find();
                 total = await User.count();
             }
+            console.log(users)
             res.json({ users, total });
         } catch (error) {
             res.status(500).json({ message: error.message });
