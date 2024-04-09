@@ -49,7 +49,7 @@ router.get("/", getPost);
 
 /**
  * @swagger
- * /api/post/addPost?id={id}:
+ * /api/post/addPost:
  *   post:
  *     summary: Thêm bài viết mới
  *     tags: [Posts]
@@ -60,10 +60,30 @@ router.get("/", getPost);
  *           schema:
  *             type: object
  *             properties:
- *               title:
+ *               PostTitle:
  *                 type: string
- *               content:
+ *               PostDescription:
  *                 type: string
+ *               PostLink:
+ *                 type: string
+ *               PostImage:
+ *                 type: string
+ *               PostMetaTitle:
+ *                 type: string
+ *               PostMetaDescription:
+ *                 type: string
+ *               PostStatus:
+ *                 type: string
+ *               PostAuthor:
+ *                  type: string
+ *               PostTag:
+ *                  type: string
+ *               PostContent:
+ *                  type: string
+ *               PostSortOrder:
+ *                  type: string
+ *               PostTotalView:
+ *                  type: string
  *     responses:
  *       '200':
  *         description: Bài viết đã được thêm thành công.

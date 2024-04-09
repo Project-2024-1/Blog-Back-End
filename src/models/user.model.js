@@ -8,15 +8,12 @@ const userSchema = new Schema({
     },
     UserName: {
         type: String, 
-        required: true,
     },
     UserPasword: {
         type: String, 
-        required: true,
     },
     UserEmail: {
         type: String,
-        required: true,
     },
     UserAvatar: {
         type: String,

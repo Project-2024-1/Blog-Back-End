@@ -36,6 +36,29 @@ const router = express.Router();
  */
 
 router.get("/", getRole);
+/**
+ * @swagger
+ * /api/post/addRole:
+ *   post:
+ *     summary: Thêm bài Quyền
+ *     tags: [Roles]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               RoleName:
+ *                 type: string
+ *               RoleDescription:
+ *                 type: string
+ *     responses:
+ *       '200':
+ *         description: Bài viết đã được thêm thành công.
+ *       '500':
+ *         description: Lỗi server khi thêm bài viết.
+ */
 router.post("/addRole", addRole);
 router.delete("/deleteRole", deleteRole);
 router.delete("/deleteManyRole", deleteManyRole);

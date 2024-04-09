@@ -1,6 +1,6 @@
 const statusCodeList = {
     // Đăng nhập thành công
-    LoginSuccess : 1,
+    LoginSuccess : 1,       
 
     // Đăng nhập thất bại
     LoginFailed: 2,
@@ -27,7 +27,25 @@ const statusCodeList = {
     TokenError: 9, 
 
     // Không có quyền truy cấp với module này
-    NotPermission: 10
+    NotPermission: 10,
+
+    // Thêm thông tin User thành công
+    UserCreateSuccess: 11,
+
+    // Thêm thoong6 tin User thất bại
+    UserCreateFailed: 13,
+
+    // Sửa thông tin User thành công
+    UserUpdateSuccess: 12,
+
+    // Sửa thông tin User thất bại
+    UserUpdateFailed: 14,
+
+    // Xóa User thành công
+    UserDeleteSuccess: 15,
+
+    // Xóa User thát bại
+    UserDeleteFailed: 16
 }
 
 export default statusCodeList;
