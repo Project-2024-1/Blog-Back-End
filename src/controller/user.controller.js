@@ -9,7 +9,7 @@ export const getUser = async (req, res) => {
             let users = [];
             let total = "";
             if(idUser){
-                users = await User.findOne({ UserCode: idUser });
+                users = await User.findOne({ _id: idUser });
                 total = "1";
             } 
             else if (pageSize && pageIndex) {

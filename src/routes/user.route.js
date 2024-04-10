@@ -47,6 +47,7 @@ const router = express.Router();
  */
 
 router.get("/", getUser);
+
 router.post("/updateUser", addUser)
 
 export default router;

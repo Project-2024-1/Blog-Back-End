@@ -38,14 +38,14 @@ app.listen(port, () => {
     console.log("Sever is running on port " + port + "!!!");
 });
 
-app.options('*', cors());
+// app.options('*', cors());
 
 app.use(cors({
     origin: '*',
     optionsSuccessStatus: 200
 }));
 
-app.use("/api/user", userRouter);
+app.use("/api/user",cors(), userRouter);
 
 app.use("/api/auth", authRouter);
 
