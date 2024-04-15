@@ -2,7 +2,7 @@
 /**
  * @swagger
  * tags:
- *   name: Posts
+ *   name: Roles
  *   description: Quản lý quyền thành viên
  */
 
@@ -38,9 +38,9 @@ const router = express.Router();
 router.get("/", getRole);
 /**
  * @swagger
- * /api/post/addRole:
+ * /api/role/addRole:
  *   post:
- *     summary: Thêm bài Quyền
+ *     summary: Thêm hoặc sửa quyền Quyền
  *     tags: [Roles]
  *     requestBody:
  *       required: true
@@ -49,6 +49,8 @@ router.get("/", getRole);
  *           schema:
  *             type: object
  *             properties:
+ *               id:
+ *                 type: string
  *               RoleName:
  *                 type: string
  *               RoleDescription:
@@ -60,7 +62,49 @@ router.get("/", getRole);
  *         description: Lỗi server khi thêm bài viết.
  */
 router.post("/addRole", addRole);
+/**
+ * @swagger
+ * /api/role/deleteRole:
+ *   delete:
+ *     summary: Xóa quyền theo ID
+ *     tags: [Roles]
+ *     parameters:
+ *       - in: query
+ *         name: roleId
+ *         required: true
+ *         description: ID của quyền cần xóa
+ *         schema:
+ *           type: string
+ *     responses:
+ *       '200':
+ *         description: Quyền đã được xóa thành công.
+ *       '404':
+ */ 
 router.delete("/deleteRole", deleteRole);
+/**
+ * @swagger
+ * /api/role/deleteManyRole:
+ *   delete:
+ *     summary: Xóa nhiều quyền
+ *     tags: [Roles]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               ids:
+ *                 type: array
+ *                 items:
+ *                   type: string
+ *                 description: Mảng chứa các ID của quyền cần xóa
+ *     responses:
+ *       '200':
+ *         description: Quyền đã được xóa thành công.
+ *       '500':
+ *         description: Lỗi server khi xóa Quyền.
+ */
 router.delete("/deleteManyRole", deleteManyRole);
 
 export default router;
