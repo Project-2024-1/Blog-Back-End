@@ -4,9 +4,6 @@
  *   name: Users
  *   description: Quản lý thành viên
  */
-
-
-
 import express from "express";
 import { getUser, addUser } from "../controller/user.controller.js";
 
@@ -45,9 +42,47 @@ const router = express.Router();
  *       '404':
  *         description: Không tìm thấy bài viết nào.
  */
-
 router.get("/", getUser);
 
+/**
+ * @swagger
+ * /api/user/updateUser:
+ *   post:
+ *     summary: Tạo User
+ *     tags: [Users]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               UserCode:
+ *                 type: string
+ *               UserName:
+ *                 type: string
+ *               UserPassword:
+ *                 type: string
+ *               UserEmail:
+ *                 type: string
+ *               UserAvatar:
+ *                 type: string
+ *               UserDescription:
+ *                 type: string
+ *               UserRole:
+ *                 type: array
+ *               UserStatus:
+ *                 type: string
+ *     responses:
+ *       '200':
+ *         description: Thêm user thành công
+ *       '404':
+ *         description: User không tồn tại
+ *       '401': 
+ *         description: Mật khẩu sai
+ *       '500':
+ *         description: lỗi server
+ */
 router.post("/updateUser", addUser)
 
 export default router;

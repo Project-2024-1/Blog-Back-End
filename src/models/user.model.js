@@ -7,10 +7,10 @@ const userSchema = new Schema({
         type: String,
     },
     UserName: {
-        type: String, 
+        type: String,
     },
     UserPasword: {
-        type: String, 
+        type: String,
     },
     UserEmail: {
         type: String,
@@ -20,22 +20,22 @@ const userSchema = new Schema({
         default: "https://cdn.pixabay.com/photo/2015/10/05/22/37/blank-profile-picture-973460_1280.png"
     },
     UserDescription: {
-        type: String, 
+        type: String,
         default: ""
     },
     UserRole: [{
-        type: Schema.Types.ObjectId, 
+        type: Schema.Types.ObjectId,
         ref: 'Role'
     }],
     AccessToken: {
-        type: String, 
+        type: String,
         default: ""
     },
     UserStatus: {
-        type: String, 
+        type: String,
         default: 1
     },
-}, { timestamps : true});
+}, { timestamps: true });
 
 const User = mongoose.model('User', userSchema);
 
