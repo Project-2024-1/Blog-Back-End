@@ -5,7 +5,7 @@ import bcryptjs from "bcryptjs";
 export const getUser = async(req, res) => {
     try {
         const { idUser, pageSize, pageIndex } = req.query;
-        console.log(idUser)
+        // console.log(idUser)
         let users = [];
         let total = "";
         if (idUser) {

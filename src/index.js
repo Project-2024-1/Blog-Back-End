@@ -38,18 +38,21 @@ app.listen(port, () => {
     console.log("Sever is running on port " + port + "!!!");
 });
 
-// app.options('*', cors());
+app.options('*', cors());
 
-app.use(cors({
-    origin: '*',
-    optionsSuccessStatus: 200
-}));
+var corsOptions = {
+    origin: 'http://localhost:5173',
+    optionsSuccessStatus: 200, // some legacy browsers (IE11, various SmartTVs) choke on 204,
 
-app.use("/api/user",cors(), userRouter);
+  }
+
+  app.use(cors(corsOptions));
+
+app.use("/api/user", userRouter);
 
 app.use("/api/auth", authRouter);
 
-app.use("/api/post", cors(), postRouter);
+app.use("/api/post",  postRouter);
 
 app.use("/api/image", imageRouter);
 

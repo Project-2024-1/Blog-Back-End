@@ -96,7 +96,7 @@ export const google = async (req, res, next) => {
 
 export const getToken = async (req, res, next) => {
   const newToken = res.locals.newToken
-  console.log(newToken)
+  // console.log(newToken)
 }
 
 export const refreshToken = async (req, res, next) => {
@@ -113,7 +113,7 @@ export const refreshToken = async (req, res, next) => {
 
     // Check if the received refreshToken matches the stored refreshToken
     if (rsToken !== accessToken) {
-      console.log("Refresh token không hợp lệ");
+      // console.log("Refresh token không hợp lệ");
       return res.sendStatus(403); // Send Forbidden status if refresh token is invalid
     }
 

@@ -44,7 +44,7 @@ export const getPost = async(req, res) => {
 
 export const addPost = async(req, res, next) => {
 
-    console.log(req.body)
+    // console.log(req.body)
     const {
         PostTitle,
         PostDescription,
@@ -62,20 +62,20 @@ export const addPost = async(req, res, next) => {
     } = req.body.data;
 
 
-    console.log(req.body.data)
+    // console.log(req.body.data)
 
     let newPostTitle = getDataBase(PostTitle, PostTitle);
-    console.log(newPostTitle);
+    // console.log(newPostTitle);
     let newPostDescription = getDataBase(PostDescription, PostDescription);
-    console.log(newPostDescription);
+    // console.log(newPostDescription);
     let newPostContent = getDataBase(PostContent, PostContent);
-    console.log(newPostContent);
+    // console.log(newPostContent);
     let newPostStatus = getDataBase(PostStatus, PostStatus);
-    console.log(newPostStatus);
+    // console.log(newPostStatus);
     let newPostSortOrder = getDataBase(PostSortOrder, PostSortOrder);
-    console.log(newPostSortOrder);
+    // console.log(newPostSortOrder);
     let newPostMetaTitle = getDataBase(PostMetaTitle, PostTitle);
-    console.log(newPostMetaTitle);
+    // console.log(newPostMetaTitle);
     let newPostMetaDescription = getDataBase(PostMetaDescription, PostDescription);
     let newPostMetaKeyword = getDataBase(PostMetaKeyword, PostTitle);
     let newPostLink = getUrlBase(PostTitle);
