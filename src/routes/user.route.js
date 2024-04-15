@@ -5,7 +5,7 @@
  *   description: Quản lý thành viên
  */
 import express from "express";
-import { getUser, addUser } from "../controller/user.controller.js";
+import { getUser, addUser, deleteUser, changePassword } from "../controller/user.controller.js";
 
 const router = express.Router();
 
@@ -84,5 +84,46 @@ router.get("/", getUser);
  *         description: lỗi server
  */
 router.post("/updateUser", addUser)
+/**
+ * @swagger
+ * /api/user/changePassword:
+ *   put:
+ *     summary: Thay đổi mật khẩu
+ *     tags: [Users]
+ *     requestBody:
+ *       required: true
+ *       content:
+ *         application/json:
+ *           schema:
+ *             type: object
+ *             properties:
+ *               userId:
+ *                 type: string
+ *               UserPassword:
+ *                 type: string
+ *     responses:
+ *       '200':
+ *         description: Thay đổi mật khẩu thành công
+ */
+router.put("/changePassword", changePassword)
+/**
+ * @swagger
+ * /api/user/deleteUser:
+ *   delete:
+ *     summary: Xóa user theo ID
+ *     tags: [Users]
+ *     parameters:
+ *       - in: query
+ *         name: userId
+ *         required: true
+ *         description: ID của User cần xóa
+ *         schema:
+ *           type: string
+ *     responses:
+ *       '200':
+ *         description: Quyền đã được xóa thành công.
+ *       '404':
+ */ 
+router.delete("/deleteUser", deleteUser)
 
 export default router;
