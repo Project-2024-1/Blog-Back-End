@@ -5,7 +5,6 @@ import bcryptjs from "bcryptjs";
 export const getUser = async(req, res) => {
     try {
         const { idUser, pageSize, pageIndex } = req.query;
-        // console.log(idUser)
         let users = [];
         let total = "";
         if (idUser) {
@@ -47,10 +46,31 @@ export const addUser = async(req, res) => {
             res.status(200).json(errorHandle(statusCodeList.UserCreateSuccess, "User created successfully.", "Thêm thông tin User thành công", ""));
         }
     } catch (error) {
-        // console.log(error);
         res.status(500).json(errorHandle(statusCodeList.UserCreateFailed, "User created failed.", "Thêm thông tin User thất bại, vui lòng liên hệ quản trị viên", error));
+
     }
 }
+
+export const updateUser = async(req, res) => {
+    try {
+        const { id, UserCode, UserName, UserEmail, UserAvatar, UserDescription, UserRole, UserStatus } = req.body;
+
+
+        // Nếu có id được truyền lên, đây là phương thức sửa User
+        const updatedUser = await User.findByIdAndUpdate(id, { UserCode, UserName, UserEmail, UserAvatar, UserDescription, UserRole, UserStatus }, { new: true });
+
+        if (!updatedUser) {
+            return res.status(404).json(errorHandle(statusCodeList.UserNotFound, "User not found.", "User không tồn tại", ""));
+        }
+
+        res.status(200).json(errorHandle(statusCodeList.UserUpdateSuccess, "User updated successfully.", "Cập nhật thông tin User thành công", ""));
+    } catch (error) {
+        console.log(error);
+        res.status(500).json(errorHandle(statusCodeList.UserCreateFailed, "User created failed.", "Thêm thông tin User thất bại, vui lòng liên hệ quản trị viên", error));
+
+    }
+}
+
 
 export const deleteUser = async(req, res) => {
     try {

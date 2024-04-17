@@ -48,7 +48,7 @@ export const uploadImageToCloudinary = async(req, res) => {
         res.status(200).json({ message: 'Image uploaded successfully.', code: 200, url: result.secure_url });
     } catch (error) {
         console.error('Error uploading image to Cloudinary:', error);
-        res.status(500).json({ error: 'Error uploading image.' });
+        res.status(500).json({ error });
     }
 };
 
@@ -62,19 +62,6 @@ export const getAllImages = async(req, res) => {
     }
 }
 
-
-// const uploadImageToCloudinary = async(imageFile, folderName) => {
-//     const imageBuffer = imageFile.buffer;
-//     const dataUrl = `data:${imageFile.mimetype};base64,${imageBuffer.toString('base64')}`;
-
-//     // Thực hiện tải ảnh lên Cloudinary
-//     const uploadResult = await cloudinary.uploader.upload(dataUrl, {
-//         resource_type: 'image',
-//         folder: "web",
-//     });
-//     console.log(uploadResult);
-//     return uploadResult;
-// };
 export const getAllImageAndFolder = async(req, res) => {
     try {
         const { folderName } = req.body;
@@ -100,15 +87,16 @@ export const getAllImageAndFolder = async(req, res) => {
 };
 
 
-// const deleteImageCloud = async(req, res) => {
-//     try {
-//         const publicId = req.params.publicId
-//         console.log("log", publicId)
-//         const result = await cloudinary.uploader.destroy(publicId);
-//         res.status(200).json({ success: true, message: 'success' });
-//     } catch (error) {
-//         console.error(error);
-//         res.status(500).json({ error: 'Lỗi khi lấy dữ liệu từ Cloudinary' });
-//     }
+export const deleteImageCloud = async(req, res) => {
+    try {
+        const nameImage = req.params.nameImage;
 
-// }
+        console.log("log", nameImage)
+            // const result = await cloudinary.v2.api.delete_resources(nameImage);
+        res.status(200).json({ success: true, message: 'success' });
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ error: 'Lỗi khi lấy dữ liệu từ Cloudinary' });
+    }
+
+}
