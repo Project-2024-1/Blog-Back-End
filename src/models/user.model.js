@@ -9,7 +9,7 @@ const userSchema = new Schema({
     UserName: {
         type: String,
     },
-    UserPasword: {
+    UserPassword: {
         type: String,
     },
     UserEmail: {

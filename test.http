@@ -61,3 +61,13 @@ Content-Type: application/json
     "UserName": "phuc tehtsdhbj",
     "UserRole": ["660ada4807f04ac3172cda59", "660ada2c07f04ac3172cda57", "660c29ea3fcd240c8c3b6d3b"]
 }
+
+###
+POST http://localhost:3000/api/log/addLog
+Content-Type: application/json
+
+{
+    "LogName" : "test log",
+    "LogDescription": "Phúc test Log cập nhật hệ thống",
+    "LogType": "1"
+}

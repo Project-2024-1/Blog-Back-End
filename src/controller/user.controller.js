@@ -26,26 +26,18 @@ export const getUser = async(req, res) => {
 
 export const addUser = async(req, res) => {
     try {
-        const { id, UserCode, UserPassword, UserName, UserEmail, UserAvatar, UserDescription, UserRole, UserStatus } = req.body;
-
-        if (id) {
-            // Nếu có id được truyền lên, đây là phương thức sửa User
-            const updatedUser = await User.findByIdAndUpdate(id, { UserCode, UserName, UserEmail, UserAvatar, UserDescription, UserRole, UserStatus }, { new: true });
-
-            if (!updatedUser) {
-                return res.status(404).json(errorHandle(statusCodeList.UserNotFound, "User not found.", "User không tồn tại", ""));
-            }
-
-            res.status(200).json(errorHandle(statusCodeList.UserUpdateSuccess, "User updated successfully.", "Cập nhật thông tin User thành công", ""));
-        } else {
+        const { UserCode, UserPassword, UserName, UserEmail, UserAvatar, UserDescription, UserRole, UserStatus } = req.body;
+console.log(req.body)
+       
             const hashedPassword = bcryptjs.hashSync(UserPassword, 10);
             // Nếu không có id được truyền lên, đây là phương thức thêm User
-            const user = new User({ UserCode, UserName, UserPasword: hashedPassword, UserEmail, UserAvatar, UserDescription, UserRole, UserStatus });
+            const user = new User({ UserCode, UserName, UserPassword: hashedPassword, UserEmail, UserAvatar, UserDescription, UserRole, UserStatus });
             await user.save();
 
             res.status(200).json(errorHandle(statusCodeList.UserCreateSuccess, "User created successfully.", "Thêm thông tin User thành công", ""));
-        }
+        
     } catch (error) {
+        console.log(error);
         res.status(500).json(errorHandle(statusCodeList.UserCreateFailed, "User created failed.", "Thêm thông tin User thất bại, vui lòng liên hệ quản trị viên", error));
 
     }
@@ -53,11 +45,11 @@ export const addUser = async(req, res) => {
 
 export const updateUser = async(req, res) => {
     try {
-        const { id, UserCode, UserName, UserEmail, UserAvatar, UserDescription, UserRole, UserStatus } = req.body;
+        const { _id, UserCode, UserName, UserEmail, UserAvatar, UserDescription, UserRole, UserStatus } = req.body;
 
 
         // Nếu có id được truyền lên, đây là phương thức sửa User
-        const updatedUser = await User.findByIdAndUpdate(id, { UserCode, UserName, UserEmail, UserAvatar, UserDescription, UserRole, UserStatus }, { new: true });
+        const updatedUser = await User.findByIdAndUpdate(_id, { UserCode, UserName, UserEmail, UserAvatar, UserDescription, UserRole, UserStatus }, { new: true });
 
         if (!updatedUser) {
             return res.status(404).json(errorHandle(statusCodeList.UserNotFound, "User not found.", "User không tồn tại", ""));

@@ -45,7 +45,19 @@ const statusCodeList = {
     UserDeleteSuccess: 15,
 
     // Xóa User thát bại
-    UserDeleteFailed: 16
+    UserDeleteFailed: 16,
+
+    // Xóa ảnh thành công
+    DeleteImageSuccess: 17,
+
+    // Xóa ảnh thát bị
+    DeleteImageFailed: 18,
+
+    // Thêm mới log thành công
+    logInsertSuccess: 19,
+
+    // Thêm mới log thất bại
+    logInsertFailed: 20,
 }
 
 export default statusCodeList;

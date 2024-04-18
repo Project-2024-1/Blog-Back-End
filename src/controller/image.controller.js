@@ -4,6 +4,8 @@ import cloudinary from '../common/cloudDinary.config.js';
 
 import multer from 'multer';
 import { CloudinaryStorage } from 'multer-storage-cloudinary';
+import { errorHandle } from "../utils/error.js";
+import statusCodeList from "../common/statusCode.js";
 
 // const storage = new CloudinaryStorage({
 //     cloudinary: cloudinary,
@@ -89,14 +91,20 @@ export const getAllImageAndFolder = async(req, res) => {
 
 export const deleteImageCloud = async(req, res) => {
     try {
-        const nameImage = req.params.nameImage;
+        const {nameImage} = req.query;
+console.log(nameImage);
 
-        console.log("log", nameImage)
-            // const result = await cloudinary.v2.api.delete_resources(nameImage);
-        res.status(200).json({ success: true, message: 'success' });
+        const result = await cloudinary.v2.api.delete_resources([nameImage],
+             {type: 'upload', 
+             resource_type: 'image'});
+        console.log(result);
+        if (!result) {
+            return res.status(404).json({ error: 'Image not found' });
+        }
+        res.status(200).json(errorHandle(statusCodeList.DeleteImageSuccess, "Delete image successfully.", "Xóa ảnh thảnh công", ""));
     } catch (error) {
         console.error(error);
-        res.status(500).json({ error: 'Lỗi khi lấy dữ liệu từ Cloudinary' });
+        res.status(500).json(errorHandle(statusCodeList.DeleteImageFailed, "Delete image failed.", "Xóa ảnh thất bại, vui lòng liên hệ quản trị viên", error));
     }
 
 }
