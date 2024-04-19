@@ -91,12 +91,13 @@ export const getAllImageAndFolder = async(req, res) => {
 
 export const deleteImageCloud = async(req, res) => {
     try {
-        const {nameImage} = req.query;
-console.log(nameImage);
+        const { nameImage } = req.query;
+        console.log(nameImage);
 
-        const result = await cloudinary.v2.api.delete_resources([nameImage],
-             {type: 'upload', 
-             resource_type: 'image'});
+        const result = await cloudinary.v2.api.delete_resources([nameImage], {
+            type: 'upload',
+            resource_type: 'image'
+        });
         console.log(result);
         if (!result) {
             return res.status(404).json({ error: 'Image not found' });

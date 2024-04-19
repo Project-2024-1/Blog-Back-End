@@ -20,7 +20,7 @@ export const getRole = async(req, res) => {
         }
         res.json({ roles, total });
     } catch (error) {
-        
+
         res.status(500).json(errorHandle(500, error.message, "Có lỗi xảy ra, vui loại liên hệ quản trị viên", error));
     }
 }

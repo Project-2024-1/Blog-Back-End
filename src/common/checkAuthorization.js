@@ -27,7 +27,9 @@ import { errorHandle } from '../utils/error.js';
 
 export const checkAuthorization = async function authenticateToken(req, res, next) {
     try {
+        // console.log(req.headers);
         const authHeader = req.headers['authorization'];
+        // console.log(authHeader);
         const token = authHeader && authHeader.split(' ')[1];
         if (!token) {
             return res.status(401).json({
@@ -36,7 +38,7 @@ export const checkAuthorization = async function authenticateToken(req, res, nex
             });
         }
 
-        jwt.verify(token, process.env.JWT_SECRET, async (err, user) => {
+        jwt.verify(token, process.env.JWT_SECRET, async(err, user) => {
             if (err) {
                 if (err.name === 'TokenExpiredError') {
                     return res.status(401).json(
@@ -44,7 +46,7 @@ export const checkAuthorization = async function authenticateToken(req, res, nex
                             statusCodeList.TokenExpired,
                             'Token expired',
                             'Đã xảy ra lỗi. Liên hệ quản trị viên',
-                             err));
+                            err));
                 } else {
                     return res.status(403).json(
                         errorHandle(
@@ -66,21 +68,21 @@ export const checkAuthorization = async function authenticateToken(req, res, nex
                             'Bạn không có quyền truy cập với module này',
                             err
                         )
-                        );
+                    );
                 }
                 next();
             }
         });
-        } catch (error) {
-            console.error(error);
-            return res.status(500).json({
-                message: 'Internal Server Error',
-                statusCode: 500,
-            });
-        }
+    } catch (error) {
+        console.error(error);
+        return res.status(500).json({
+            message: 'Internal Server Error',
+            statusCode: 500,
+        });
+    }
 };
 
-const checkPermission = async (req, userPermissions) => {
+const checkPermission = async(req, userPermissions) => {
     // Lấy ra tên route từ request
     const routeName = req.baseUrl + req.route.path;
 
@@ -111,7 +113,7 @@ const checkPermission = async (req, userPermissions) => {
 };
 
 
-const generateNewToken = async (userId, roleUser) => {
+const generateNewToken = async(userId, roleUser) => {
     const newToken = jwt.sign({ id: userId, role: roleUser }, process.env.JWT_SECRET, { expiresIn: '60s' });
     return newToken;
 };

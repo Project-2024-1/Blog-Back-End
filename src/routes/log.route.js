@@ -1,4 +1,3 @@
-
 /**
  * @swagger
  * tags:
@@ -35,7 +34,7 @@ const router = express.Router();
  *         description: Không tìm thấy bài viết nào.
  */
 
-router.get("/", getLog);
+router.get("/", checkAuthorization, getLog);
 /**
  * @swagger
  * /api/post/addRole:
@@ -59,7 +58,7 @@ router.get("/", getLog);
  *       '500':
  *         description: Lỗi server khi thêm bài viết.
  */
-router.post("/addLog", addLog);
+router.post("/addLog", checkAuthorization, addLog);
 
 // router.patch("/updateLog", updateLog);
 
