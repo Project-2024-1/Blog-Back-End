@@ -114,7 +114,15 @@ export const refreshToken = async(req, res, next) => {
         const newAccessToken = jwt.sign({ id: idUser, role: roleToken }, process.env.JWT_SECRET, { expiresIn: "30s" });
 
         // Send the new access token to the client
-        res.status(200).json({ token: newAccessToken });
+        res.status(200).json({
+            token: newAccessToken,
+            message: errorHandle(
+              statusCodeList.GetRefreshTokenSuccess,
+              "Token refreshed",
+              "Token đã được refresh thành công",
+              ""
+            ),
+          });
     } catch (error) {
         console.error("Error refreshing token:", error);
         res.sendStatus(500); // Internal Server Error if any error occurs

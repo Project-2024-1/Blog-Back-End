@@ -2,7 +2,7 @@ POST http://localhost:3000/api/role/addRole
 Content-Type: application/json
 
 {
-    "RoleName" : "Sửa quyền thành viên",
+    "RoleName" : "Xem log",
     "RoleDescription": "Quyền được xsửa quyền thành viên"
 }
 
@@ -10,13 +10,13 @@ Content-Type: application/json
 GET http://localhost:3000/api/user?idUser=6616b887eb3c52e8129636ac
 ###
 GET http://localhost:3000/api/role/
-authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjY2MGFkY2VkMDM5MDIyNmJkZWExNThhNiIsInJvbGUiOlsiNjYwYWRhNDgwN2YwNGFjMzE3MmNkYTU5IiwiNjYwYWRhMmMwN2YwNGFjMzE3MmNkYTU3Il0sImlhdCI6MTcxMjQ5OTA1NSwiZXhwIjoxNzEyNDkMDg1fQ.w6LlSf5Qy_4quoltcZJ8HtViKe0fWP6wHvWwkNeukkg
-# Content-Type: application/json
 
-# {
-#     "RoleName" : "Sửa quyền thành viên",
-#     "RoleDescription": "Quyền được xsửa quyền thành viên"
-# }
+Content-Type: application/json
+
+{
+    "RoleName" : "Xem log",
+    "RoleDescription": "Quyền được xsửa quyền thành viên"
+}
 ###
 GET http://localhost:3000/api/auth/getToken
  

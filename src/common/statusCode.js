@@ -58,6 +58,12 @@ const statusCodeList = {
 
     // Thêm mới log thất bại
     logInsertFailed: 20,
+
+    // Không có quyền truy cập
+    Unauthorized: 21,
+
+    // Lấy RefreshToken thành công
+    GetRefreshTokenSuccess: 22,
 }
 
 export default statusCodeList;

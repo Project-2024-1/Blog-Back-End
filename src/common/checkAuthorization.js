@@ -32,10 +32,9 @@ export const checkAuthorization = async function authenticateToken(req, res, nex
         // console.log(authHeader);
         const token = authHeader && authHeader.split(' ')[1];
         if (!token) {
-            return res.status(401).json({
-                message: 'Unauthorized',
-                statusCode: 401,
-            });
+            return res.status(401).json(
+               errorHandle(statusCodeList.Unauthorized, 'Unauthorized', 'Bạn không có quyền truy cập mục này', '')
+            );
         }
 
         jwt.verify(token, process.env.JWT_SECRET, async(err, user) => {
@@ -103,6 +102,9 @@ const checkPermission = async(req, userPermissions) => {
                 break;
             case '/api/role/deleteRole':
                 if (roleName === roleList.deleteRole) return true;
+                break;
+            case '/api/log/':
+                if (roleName === roleList.getLog) return true;
                 break;
             default:
                 return false;

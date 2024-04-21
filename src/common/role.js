@@ -18,6 +18,10 @@ const roleList = {
     // editRole: 'Sửa quyên',
     deleteRole: 'Xóa quyên',
     //#endregion
+
+
+    // xem log
+    getLog: 'Xem log',
 }
 
 export default roleList;
