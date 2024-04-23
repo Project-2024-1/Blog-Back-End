@@ -43,8 +43,62 @@ export const getPost = async(req, res) => {
 // }
 
 export const addPost = async(req, res, next) => {
+    const {
+        PostTitle,
+        PostDescription,
+        PostLink,
+        PostImage,
+        PostMetaTitle,
+        PostMetaDescription,
+        PostMetaKeyword,
+        PostAuthor,
+        PostTag,
+        PostContent,
+        PostStatus,
+        PostSortOrder,
+    } = req.body;
 
-    console.log(req.body)
+    let newPostTitle = getDataBase(PostTitle, PostTitle);
+    let newPostDescription = getDataBase(PostDescription, PostDescription);
+    let newPostContent = getDataBase(PostContent, PostContent);
+    let newPostStatus = getDataBase(PostStatus, PostStatus);
+    let newPostSortOrder = getDataBase(PostSortOrder, PostSortOrder);
+    let newPostMetaTitle = getDataBase(PostMetaTitle, PostTitle);
+    let newPostMetaDescription = getDataBase(PostMetaDescription, PostDescription);
+    let newPostMetaKeyword = getDataBase(PostMetaKeyword, PostTitle);
+    let newPostLink = "";
+    if(PostLink === ""){
+         newPostLink = getUrlBase(PostTitle);
+    }else{
+         newPostLink = getDataBase(PostLink, PostLink);
+    }
+
+
+    let postToUpdate = null;
+    postToUpdate = new Post({
+        PostTitle: newPostTitle,
+        PostDescription: newPostDescription,
+        PostLink: newPostLink,
+        PostImage,
+        PostMetaTitle: newPostMetaTitle,
+        PostMetaDescription: newPostMetaDescription,
+        PostMetaKeyword: newPostMetaKeyword,
+        PostAuthor,
+        PostTag,
+        PostContent: newPostContent,
+        PostStatus: newPostStatus,
+        PostSortOrder: newPostSortOrder
+    });
+    
+    try {
+        await postToUpdate.save();
+        res.status(201).json("Bài viết đã được lưu thành công.");
+    } catch (error) {
+        next(error);
+    }
+}
+
+export const updatePost = async(req, res) => {
     const {
         PostTitle,
         PostDescription,
@@ -59,50 +113,25 @@ export const addPost = async(req, res, next) => {
         PostStatus,
         PostSortOrder,
         id
-    } = req.body.data;
-
-
-    console.log(req.body.data)
-
+    } = req.body;
+    console.log(PostContent)
     let newPostTitle = getDataBase(PostTitle, PostTitle);
-    console.log(newPostTitle);
     let newPostDescription = getDataBase(PostDescription, PostDescription);
-    console.log(newPostDescription);
     let newPostContent = getDataBase(PostContent, PostContent);
-    console.log(newPostContent);
     let newPostStatus = getDataBase(PostStatus, PostStatus);
-    console.log(newPostStatus);
     let newPostSortOrder = getDataBase(PostSortOrder, PostSortOrder);
-    console.log(newPostSortOrder);
     let newPostMetaTitle = getDataBase(PostMetaTitle, PostTitle);
-    console.log(newPostMetaTitle);
     let newPostMetaDescription = getDataBase(PostMetaDescription, PostDescription);
     let newPostMetaKeyword = getDataBase(PostMetaKeyword, PostTitle);
-    let newPostLink = getUrlBase(PostTitle);
+    let newPostLink = "";
+    if(PostLink === ""){
+         newPostLink = getUrlBase(PostTitle);
+    }else{
+         newPostLink = getDataBase(PostLink, PostLink);
+    }
 
-    let postToUpdate = null;
-    if (id) {
-        // Nếu có id được truyền lên, đó là yêu cầu sửa đổi dữ liệu
-        postToUpdate = await Post.findById(id);
-        if (!postToUpdate) {
-            return res.status(404).json({ error: "Bài viết không tồn tại." });
-        }
-        // Cập nhật các trường dữ liệu mới
-        postToUpdate.PostTitle = newPostTitle;
-        postToUpdate.PostDescription = newPostDescription;
-        postToUpdate.PostLink = newPostLink;
-        postToUpdate.PostImage = PostImage;
-        postToUpdate.PostMetaTitle = newPostMetaTitle;
-        postToUpdate.PostMetaDescription = newPostMetaDescription;
-        postToUpdate.PostMetaKeyword = newPostMetaKeyword;
-        postToUpdate.PostAuthor = PostAuthor;
-        postToUpdate.PostTag = PostTag;
-        postToUpdate.PostContent = newPostContent;
-        postToUpdate.PostStatus = newPostStatus;
-        postToUpdate.PostSortOrder = newPostSortOrder;
-    } else {
-        // Nếu không có id được truyền lên, đây là yêu cầu thêm mới
-        postToUpdate = new Post({
+    try {
+        await Post.findByIdAndUpdate(id, {
             PostTitle: newPostTitle,
             PostDescription: newPostDescription,
             PostLink: newPostLink,
@@ -114,16 +143,11 @@ export const addPost = async(req, res, next) => {
             PostTag,
             PostContent: newPostContent,
             PostStatus: newPostStatus,
-            PostSortOrder: newPostSortOrder
-        });
-    }
-    try {
-        await postToUpdate.save();
-        res.status(201).json("Bài viết đã được lưu thành công.");
+            PostSortOrder: newPostSortOrder} , {new: true});
+        res.status(200).json("Bài viết đã được cập nhật.");
     } catch (error) {
-        next(error);
-    }
-}
+        res.status(500).json({ error: 'An error occurred while updating the post' });
+    }}
 
 export const deletePost = async(req, res) => {
     const idPost = req.body._id;

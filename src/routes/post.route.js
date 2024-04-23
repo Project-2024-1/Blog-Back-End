@@ -7,7 +7,7 @@
 
 import express from "express";
 import { checkAuthorization } from "../common/checkAuthorization.js";
-import { addPost, deletePost, getPost } from "../controller/post.controller.js";
+import { addPost, deletePost, getPost, updatePost } from "../controller/post.controller.js";
 
 const router = express.Router();
 /**
@@ -90,7 +90,7 @@ router.get("/", getPost);
  *       '500':
  *         description: Lỗi server khi thêm bài viết.
  */
-router.post("/addPost", checkAuthorization, addPost);
+router.post("/addPost", addPost);
 
 /**
  * @swagger
@@ -137,6 +137,8 @@ router.delete("/deletePost", checkAuthorization, deletePost);
  *       '500':
  *         description: Lỗi server khi xóa bài viết.
  */
+
+router.patch("/updatePost", updatePost)
 router.delete("/deleteManyPost", checkAuthorization, deletePost);
 
 export default router;

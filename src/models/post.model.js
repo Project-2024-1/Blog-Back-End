@@ -37,7 +37,6 @@ const postSchema = new Schema({
     PostAuthor: {
         type: Schema.Types.ObjectId,
         ref: 'User', // Tham chiếu đến mô hình User
-
     },
     PostTag: {
         type: String,
