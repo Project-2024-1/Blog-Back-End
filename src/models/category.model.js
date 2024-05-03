@@ -2,22 +2,20 @@ import mongoose from "mongoose";
 
 const Schema = mongoose.Schema;
 
-const commentActionSchema = new Schema({
-    Comment: {
-        type: Schema.Types.ObjectId,
-        ref: 'Comment'
+const categorySchema = new Schema({
+    CategoryName: {
+        type: String,
     },
-    User: {
-        type: Schema.Types.ObjectId,
-        ref: 'User'
+    CategoryDescription: {
+        type: String,
+        default: ""
     },
-    CommentActionType: {
-        type: String, 
-        unique : true,
+    CategoryStatus: {
+        type: String,
         default: 1
     },
-}, { timestamps : true});
+}, { timestamps: true });
 
-const CommentAction = mongoose.model('CommentAction', commentActionSchema);
+const Category = mongoose.model('Category', categorySchema);
 
-export default CommentAction;
+export default Category;

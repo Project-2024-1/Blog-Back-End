@@ -5,11 +5,11 @@ import { getBaseData } from "./baseController.js";
 
 export const getPost = async(req, res) => {
     try {
-        const {idPost , pageSize, pageIndex} = req.query;
+        const { id, pageSize, pageIndex } = req.query;
         let posts = [];
         let total = "";
-        if (idPost) {
-            posts = await Post.findOne({ _id: idPost });
+        if (id) {
+            posts = await Post.findOne({ _id: id });
             total = "1";
         } else if (pageSize && pageIndex) {
             posts = await Post.find().skip((pageIndex - 1) * pageSize).limit(pageSize);
@@ -56,6 +56,7 @@ export const addPost = async(req, res, next) => {
         PostContent,
         PostStatus,
         PostSortOrder,
+        PostCategory
     } = req.body;
 
     let newPostTitle = getDataBase(PostTitle, PostTitle);
@@ -67,10 +68,10 @@ export const addPost = async(req, res, next) => {
     let newPostMetaDescription = getDataBase(PostMetaDescription, PostDescription);
     let newPostMetaKeyword = getDataBase(PostMetaKeyword, PostTitle);
     let newPostLink = "";
-    if(PostLink === ""){
-         newPostLink = getUrlBase(PostTitle);
-    }else{
-         newPostLink = getDataBase(PostLink, PostLink);
+    if (PostLink === "") {
+        newPostLink = getUrlBase(PostTitle);
+    } else {
+        newPostLink = getDataBase(PostLink, PostLink);
     }
 
 
@@ -87,9 +88,10 @@ export const addPost = async(req, res, next) => {
         PostTag,
         PostContent: newPostContent,
         PostStatus: newPostStatus,
-        PostSortOrder: newPostSortOrder
+        PostSortOrder: newPostSortOrder,
+        PostCategory: PostCategory
     });
-    
+
     try {
         await postToUpdate.save();
         res.status(201).json("Bài viết đã được lưu thành công.");
@@ -112,9 +114,10 @@ export const updatePost = async(req, res) => {
         PostContent,
         PostStatus,
         PostSortOrder,
-        id
+        id,
+        PostCategory
     } = req.body;
-    console.log(PostContent)
+
     let newPostTitle = getDataBase(PostTitle, PostTitle);
     let newPostDescription = getDataBase(PostDescription, PostDescription);
     let newPostContent = getDataBase(PostContent, PostContent);
@@ -124,10 +127,10 @@ export const updatePost = async(req, res) => {
     let newPostMetaDescription = getDataBase(PostMetaDescription, PostDescription);
     let newPostMetaKeyword = getDataBase(PostMetaKeyword, PostTitle);
     let newPostLink = "";
-    if(PostLink === ""){
-         newPostLink = getUrlBase(PostTitle);
-    }else{
-         newPostLink = getDataBase(PostLink, PostLink);
+    if (PostLink === "") {
+        newPostLink = getUrlBase(PostTitle);
+    } else {
+        newPostLink = getDataBase(PostLink, PostLink);
     }
 
     try {
@@ -143,11 +146,14 @@ export const updatePost = async(req, res) => {
             PostTag,
             PostContent: newPostContent,
             PostStatus: newPostStatus,
-            PostSortOrder: newPostSortOrder} , {new: true});
+            PostSortOrder: newPostSortOrder,
+            PostCategory: PostCategory
+        }, { new: true });
         res.status(200).json("Bài viết đã được cập nhật.");
     } catch (error) {
         res.status(500).json({ error: 'An error occurred while updating the post' });
-    }}
+    }
+}
 
 export const deletePost = async(req, res) => {
     const idPost = req.body._id;

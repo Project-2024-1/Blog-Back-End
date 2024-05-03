@@ -58,6 +58,10 @@ const postSchema = new Schema({
         type: String,
         default: 0
     },
+    PostCategory: [{
+        type: Schema.Types.ObjectId,
+        ref: 'Category'
+    }],
 }, { timestamps: true });
 
 const Post = mongoose.model('Post', postSchema);

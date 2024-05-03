@@ -17,20 +17,20 @@ const router = express.Router();
  *     summary: Lấy danh sách bài viết theo ID, pageSize và pageIndex
  *     tags: [Posts]
  *     parameters:
- *       - in: path
+ *       - in: query
  *         name: id
  *         required: false
  *         schema:
  *           type: string
  *         description: ID của bài viết cần lấy
- *       - in: path
+ *       - in: query
  *         name: pageSize
  *         required: false
  *         schema:
  *           type: integer
  *           format: int32
  *         description: Số lượng bài viết trên mỗi trang
- *       - in: path
+ *       - in: query
  *         name: pageIndex
  *         required: false
  *         schema:
