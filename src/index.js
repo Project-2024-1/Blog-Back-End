@@ -10,6 +10,7 @@ import postRouter from './routes/post.route.js';
 import imageRouter from './routes/image.route.js';
 import roleRouter from './routes/role.route.js';
 import logRouter from './routes/log.route.js';
+import categoryRouter from './routes/category.router.js';
 
 dotenv.config();
 
@@ -57,6 +58,8 @@ app.use("/api/image", imageRouter);
 app.use("/api/role", roleRouter);
 
 app.use("/api/log", logRouter);
+
+app.use("/api/category", categoryRouter);
 
 //middle were xử lý nhiều công việc trước khi chuyển đến route chính 
 // next : có thể gọi để chuyển quyền sang middleware tiếp theo 

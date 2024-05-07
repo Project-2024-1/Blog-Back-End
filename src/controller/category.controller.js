@@ -36,21 +36,22 @@ export const addCategory = async(req, res, next) => {
 
     let newCategoryName = getDataBase(CategoryName, CategoryName);
     let newCategoryDescription = getDataBase(CategoryDescription, CategoryDescription);
-    let categoryToUpdate = null;
 
     // Nếu không có id được truyền lên, đây là yêu cầu thêm mới
-    categoryToUpdate = new Category({
+    let categoryToUpdate = new Category({
         CategoryName: newCategoryName,
         CategoryDescription: newCategoryDescription,
         CategoryStatus: CategoryStatus
     });
+
+    try {
+        await categoryToUpdate.save();
+        res.status(201).json(errorHandle(201, "Category created successfully.", "Them category thanh cong", ""));
+    } catch (error) {
+        next(error);
+    }
 }
-try {
-    await categoryToUpdate.save();
-    res.status(201).json(errorHandle(201, "Category created successfully.", "Them category thanh cong", ""));
-} catch (error) {
-    next(error);
-}
+
 
 
 export const updateCategory = async(req, res, next) => {
@@ -64,7 +65,7 @@ export const updateCategory = async(req, res, next) => {
 
     let newCategoryName = getDataBase(CategoryName, CategoryName);
     let newCategoryDescription = getDataBase(CategoryDescription, CategoryDescription);
-    let categoryToUpdate = null;
+    // let categoryToUpdate = null;
 
     try {
         await Category.findByIdAndUpdate(id, {
@@ -101,3 +102,5 @@ export const deleteManyCategory = async(req, res, next) => {
         next(error);
     }
 }
+
+// API lấy 

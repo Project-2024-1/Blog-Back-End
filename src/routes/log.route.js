@@ -1,8 +1,8 @@
 /**
  * @swagger
  * tags:
- *   name: Posts
- *   description: Quản lý quyền thành viên
+ *   name: Logs
+ *   description: Quản lý thao tác hệ thống
  */
 
 
@@ -16,31 +16,31 @@ const router = express.Router();
 
 /**
  * @swagger
- * /api/role/:
+ * /api/log/:
  *   get:
- *     summary: Lấy danh sách quyền thành viên theo ID
- *     tags: [Roles]
+ *     summary: Lấy danh sách log theo ID
+ *     tags: [Logs]
  *     parameters:
- *       - in: path
+ *       - in: query
  *         name: id
  *         required: false
  *         schema:
  *           type: string
- *         description: ID của quyền cần lấy
+ *         description: ID của log cần lấy
  *     responses:
  *       '200':
- *         description: Thành công. Trả về danh sách bài viết.
+ *         description: Thành công. Trả về danh sách log.
  *       '404':
- *         description: Không tìm thấy bài viết nào.
+ *         description: Không tìm thấy log nào.
  */
 
 router.get("/", checkAuthorization, getLog);
 /**
  * @swagger
- * /api/post/addRole:
+ * /api/log/addLog:
  *   post:
- *     summary: Thêm bài Quyền
- *     tags: [Roles]
+ *     summary: Thêm log mới
+ *     tags: [Logs]
  *     requestBody:
  *       required: true
  *       content:
@@ -48,15 +48,22 @@ router.get("/", checkAuthorization, getLog);
  *           schema:
  *             type: object
  *             properties:
- *               RoleName:
+ *               LogName:
  *                 type: string
- *               RoleDescription:
+ *                 description: Tên của log mới
+ *               LogDescription:
  *                 type: string
+ *                 description: Mô tả của log mới
+ *               LogType:
+ *                 type: string
+ *                 description: Loại của log mới
  *     responses:
  *       '200':
- *         description: Bài viết đã được thêm thành công.
+ *         description: Log đã được thêm thành công.
+ *       '400':
+ *         description: Dữ liệu không hợp lệ.
  *       '500':
- *         description: Lỗi server khi thêm bài viết.
+ *         description: Lỗi server khi thêm log.
  */
 router.post("/addLog", checkAuthorization, addLog);
 

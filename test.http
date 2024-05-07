@@ -1,11 +1,30 @@
-POST http://localhost:3000/api/role/addRole
+POST http://localhost:3000/api/category/addCategory
 Content-Type: application/json
 
 {
-    "RoleName" : "Xem log",
-    "RoleDescription": "Quyền được xsửa quyền thành viên"
+    "CategoryName" : "Bóng đá",
+    "CategoryDescription": "Danh mục bóng đá"
+}
+###
+PATCH http://localhost:3000/api/post/updatePost
+Content-Type: application/json
+{
+    "id": "660ecb5229aca5a47350fbaf",
+    "PostCategory" : "663a360f480c20522fd559c9",
 }
 
+
+
+###
+GET http://localhost:3000/api/post/
+
+###
+POST http://localhost:3000/api/post/addPost
+# Content-Type: application/json
+{
+    "PostTitle": "aaaa",
+    "PostCategory" : "663a360f480c20522fd559c9",
+}
 ###
 GET http://localhost:3000/api/user?idUser=6616b887eb3c52e8129636ac
 ###

@@ -43,6 +43,8 @@ export const getPost = async(req, res) => {
 // }
 
 export const addPost = async(req, res, next) => {
+
+    console.log(req.body)
     const {
         PostTitle,
         PostDescription,
@@ -73,8 +75,6 @@ export const addPost = async(req, res, next) => {
     } else {
         newPostLink = getDataBase(PostLink, PostLink);
     }
-
-
     let postToUpdate = null;
     postToUpdate = new Post({
         PostTitle: newPostTitle,
@@ -117,6 +117,8 @@ export const updatePost = async(req, res) => {
         id,
         PostCategory
     } = req.body;
+
+    console.log(req.body);
 
     let newPostTitle = getDataBase(PostTitle, PostTitle);
     let newPostDescription = getDataBase(PostDescription, PostDescription);
@@ -177,4 +179,19 @@ export const deleteMultiplePosts = async(req, res, next) => {
     } catch (error) {
         next(error);
     }
+}
+
+// API lấy Post theo Category
+export const getPostByCategory = async(req, res) => {
+    const { id, pageSize, pageIndex } = req.query;
+    let posts = [];
+    let total = 0;
+    if (id) {
+        posts = await Post.find({ PostCategory: id }).skip((pageIndex - 1) * pageSize).limit(pageSize);
+        total = await Post.count({ PostCategory: id });
+    } else if (pageSize && pageIndex) {
+        posts = await Post.find().skip((pageIndex - 1) * pageSize).limit(pageSize);
+        total = await Post.count();
+    } 
+    res.json({ posts, total });
 }
